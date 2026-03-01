@@ -15,7 +15,7 @@
 # [habilidades](image-3.png)
 # [sistema de conquistas](image-4.png)
 # [Modo new game +](image-5.png)
-
+# [app android] [o circulo da ascensão] :[1]
 ## Rodar
 ```bash
 npm install
@@ -50,3 +50,6 @@ Veja `public/assets/README_ASSETS.txt`.
 
 ## Onde é usado
 - `src/scenes/GameScene.js` cria player/boss/props/particles usando frames do atlas.
+
+[1]: ./O%20circulo%20da%20Ascens%C3%A3o.apk
+
