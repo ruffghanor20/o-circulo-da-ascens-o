@@ -1,5 +1,3 @@
-MODO PREMIUM (ATLAS)
-
 O jogo carrega tudo (personagem, boss, props e FX) a partir de UM atlas:
 
 public/assets/atlas/
@@ -50,5 +48,4 @@ SE VOCÊ FOR TROCAR ASSETS:
 ---
 
 Obs:
-A pasta public/assets/spritesheets/ foi mantida só como referência/backup do pipeline,
-mas o jogo NÃO a usa no modo premium.
+A pasta public/assets/spritesheets/ foi mantida só como referência/backup do pipeline.
