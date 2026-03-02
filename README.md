@@ -22,7 +22,7 @@ npm install
 npm run dev
 ```
 
-## Assets (premium)
+## Assets
 ### Atlas principal
 ```txt
 public/assets/atlas/
