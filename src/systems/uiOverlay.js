@@ -243,20 +243,22 @@ export class UIOverlay {
   }
 
   // Modals
-  openAch(){ this.achModal.classList.add('is-open'); this.achModal.setAttribute('aria-hidden','false'); }
+  openAch(){ this.setQuickMenuOpen(false); this.achModal.classList.add('is-open'); this.achModal.setAttribute('aria-hidden','false'); }
   closeAch(){ this.achModal.classList.remove('is-open'); this.achModal.setAttribute('aria-hidden','true'); }
 
   openShop(){
+    this.setQuickMenuOpen(false);
     this.shopModal.classList.add('is-open');
     this.shopModal.setAttribute('aria-hidden','false');
     window.dispatchEvent(new CustomEvent('bf:shop:open'));
   }
   closeShop(){ this.shopModal.classList.remove('is-open'); this.shopModal.setAttribute('aria-hidden','true'); }
 
-  openFate(){ this.fateModal.classList.add('is-open'); this.fateModal.setAttribute('aria-hidden','false'); }
+  openFate(){ this.setQuickMenuOpen(false); this.fateModal.classList.add('is-open'); this.fateModal.setAttribute('aria-hidden','false'); }
   closeFate(){ this.fateModal.classList.remove('is-open'); this.fateModal.setAttribute('aria-hidden','true'); }
 
   openInv(){
+    this.setQuickMenuOpen(false);
     this.invModal.classList.add('is-open');
     this.invModal.setAttribute('aria-hidden','false');
     if (this.lastState) this.renderInventory(this.lastState);
@@ -271,6 +273,7 @@ export class UIOverlay {
   closeSkills(){ this.skillsModal.classList.remove('is-open'); this.skillsModal.setAttribute('aria-hidden','true'); }
 
   openPause(){
+    this.setQuickMenuOpen(false);
     this.pauseModal.classList.add('is-open');
     this.pauseModal.setAttribute('aria-hidden','false');
     this.pauseMsg.textContent = 'Boss congelado. Abra Loja/Inventário/Árvore e ajuste sua build.';
