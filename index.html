@@ -48,6 +48,32 @@
         gap:8px;
         flex-wrap:wrap;
       }
+
+      /* Menu rápido: fica recolhido durante a jogatina e abre no canto superior. */
+      .quick-menu{
+        position:absolute;
+        right:12px;
+        top:max(10px, env(safe-area-inset-top));
+        z-index:30;
+        pointer-events:auto;
+      }
+      .quick-menu-toggle{
+        min-width:46px;
+        min-height:42px;
+        font-size:18px;
+        padding:8px 12px;
+      }
+      .quick-menu-panel{
+        display:none;
+        margin-top:8px;
+        padding:10px;
+        border:1px solid var(--line);
+        border-radius:14px;
+        background: rgba(12,18,34,.92);
+        box-shadow: var(--shadow);
+        min-width:170px;
+      }
+      .quick-menu.is-open .quick-menu-panel{ display:grid; gap:8px; }
       .pill b{ font-weight:700; }
       .btn{
         pointer-events:auto;
@@ -72,7 +98,8 @@
         width:min(980px, 96vw);
         max-height: min(78vh, 900px);
         overflow:auto;
-@@ -184,70 +196,96 @@
+        background: linear-gradient(180deg, rgba(12,18,34,.96), rgba(8,10,18,.96));
+@@ -184,70 +222,85 @@
         font-size: 12px;
         box-shadow: var(--shadow);
         pointer-events:none;
@@ -100,29 +127,13 @@
       }
 
       @media (max-width: 980px){
-        .topbar{ flex-wrap:wrap; row-gap:8px; }
+        .topbar{ flex-wrap:wrap; row-gap:8px; padding-right:68px; }
         #statsPill{ order:1; width:100%; justify-content:space-between; flex-wrap:wrap; }
         #bossPill{ order:2; width:100%; max-width:none; }
-        #actionsPill{ order:3; width:100%; justify-content:flex-start; }
       }
 
       @media (orientation: portrait) and (max-width: 980px){
-        .topbar{
-          top:auto;
-          bottom:0;
-          padding:8px 10px calc(8px + env(safe-area-inset-bottom));
-          background: linear-gradient(180deg, rgba(7,10,18,0), rgba(7,10,18,.72));
-        }
-
-        #statsPill, #bossPill{ width: calc(50% - 6px); }
-        #actionsPill{
-          width:100%;
-          overflow-x:auto;
-          flex-wrap:nowrap;
-          -webkit-overflow-scrolling: touch;
-          scrollbar-width: thin;
-        }
-        #actionsPill .btn{ white-space:nowrap; }
+        .quick-menu{ right:10px; }
       }
     </style>
   </head>
@@ -143,7 +154,12 @@
           </div>
           <span class="small" id="bossHpText">—</span>
         </div>
-        <div class="pill" id="actionsPill">
+      </div>
+
+      <!-- Menu recolhido para mobile/desktop: pausa automaticamente ao abrir. -->
+      <div class="quick-menu" id="quickMenu">
+        <button class="btn quick-menu-toggle" id="btnMenuToggle" aria-expanded="false" aria-controls="menuPanel" title="Abrir menu">☰</button>
+        <div class="quick-menu-panel" id="menuPanel">
           <button class="btn" id="btnShop">Loja</button>
           <button class="btn" id="btnInv">Inventário</button>
           <button class="btn" id="btnSkills">Árvore</button>
