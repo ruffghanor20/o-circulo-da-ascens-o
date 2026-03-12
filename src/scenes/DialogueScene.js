@@ -1,10 +1,14 @@
 // src/scenes/DialogueScene.js
+// Import explícito para garantir que Phaser.Scene exista neste módulo.
+// Sem isso, alguns ambientes podem lançar "ReferenceError: Phaser is not defined".
+import Phaser from 'phaser';
 import { STORY } from '../systems/storyData.js';
 
 export class DialogueScene extends Phaser.Scene {
   constructor(){ super('Dialogue'); }
 
   init(data){
+    // Dados recebidos ao abrir a cena de diálogo.
     this.nodeId = data.nodeId;
     this.story = data.story;
     this.onClose = data.onClose || null;
@@ -12,6 +16,7 @@ export class DialogueScene extends Phaser.Scene {
 
   create(){
     const node = STORY[this.nodeId];
+    // Fallback defensivo: se o nó não existir, fecha sem travar a partida.
     if (!node){
       this.close();
       return;
@@ -23,6 +28,7 @@ export class DialogueScene extends Phaser.Scene {
     const w = this.scale.width;
     const h = this.scale.height;
 
+    // Camada escura para destacar o diálogo sobre o gameplay.
     this.add.rectangle(w/2, h/2, w, h, 0x000000, 0.58).setDepth(1000);
 
     const boxH = Math.max(170, Math.round(h * 0.30));
@@ -50,6 +56,7 @@ export class DialogueScene extends Phaser.Scene {
 
     this.showLine();
 
+    // Cada toque avança uma linha; ao final, persiste a flag da história (se houver).
     this.input.on('pointerdown', () => {
       this.i++;
       if (this.i >= this.lines.length){
@@ -60,6 +67,7 @@ export class DialogueScene extends Phaser.Scene {
       }
     });
 
+    // Em resize, reinicia a cena de diálogo para recalcular layout sem perder contexto.
     this.scale.on('resize', () => {
       this.scene.restart({ nodeId: this.nodeId, story: this.story, onClose: this.onClose });
     });
@@ -67,6 +75,7 @@ export class DialogueScene extends Phaser.Scene {
 
   showLine(){
     const line = this.lines[this.i];
+    // Formato "Autor: texto" para título dinâmico; fallback para título padrão.
     const m = /^([^:]{2,24}):\s*(.*)$/.exec(line);
     if (m){
       this.title.setText(m[1]);
