@@ -19,14 +19,16 @@
         --shadow: 0 12px 30px rgba(0,0,0,.55);
       }
       *{ box-sizing:border-box; }
-      html,body{ height:100%; margin:0; background: radial-gradient(1200px 800px at 30% 15%, #111a33, var(--bg)); color:var(--txt); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; overflow:hidden; }
-      #app{ position:relative; width:100%; height:100%; }
+      html,body{ height:100%; margin:0; background: radial-gradient(1200px 800px at 30% 15%, #111a33, var(--bg)); color:var(--txt); font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; overflow:hidden; overscroll-behavior:none; }
+      #app{ position:relative; width:100%; height:100dvh; min-height:100svh; }
       canvas{ image-rendering: crisp-edges; image-rendering: pixelated; }
 
       .topbar{
         position:absolute; left:0; top:0; width:100%;
-        display:flex; gap:10px; align-items:center; justify-content:space-between;
-        padding:10px 12px; pointer-events:none;
+        display:flex; gap:10px; align-items:flex-start; justify-content:space-between;
+        padding: max(10px, env(safe-area-inset-top)) 12px 10px;
+        pointer-events:none;
+        z-index: 20;
       }
       .pill{
         pointer-events:auto;
@@ -35,6 +37,16 @@
         background: rgba(12,18,34,.72); backdrop-filter: blur(6px);
         border-radius: 14px; box-shadow: var(--shadow);
         font-size: 14px;
+        max-width: 100%;
+      }
+
+      #bossPill{ max-width: min(48vw, 360px); }
+
+      #actionsPill{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex-wrap:wrap;
       }
       .pill b{ font-weight:700; }
       .btn{
@@ -60,127 +72,7 @@
         width:min(980px, 96vw);
         max-height: min(78vh, 900px);
         overflow:auto;
-        background: linear-gradient(180deg, rgba(12,18,34,.96), rgba(8,10,18,.96));
-        border:1px solid var(--line);
-        border-radius: 18px;
-        box-shadow: var(--shadow);
-      }
-      .modal-head{
-        position:sticky; top:0;
-        padding:14px 16px;
-        display:flex; align-items:center; justify-content:space-between;
-        border-bottom: 1px solid rgba(28,42,77,.6);
-        background: rgba(12,18,34,.98);
-        z-index: 1;
-      }
-      .modal-head h2{ margin:0; font-size: 16px; letter-spacing:.3px; }
-      .modal-body{ padding: 14px 16px 18px; }
-
-      .grid{
-        display:grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 12px;
-      }
-
-      .badge{
-        position:relative;
-        padding: 12px 12px 12px 60px;
-        border-radius: 16px;
-        border:1px solid rgba(28,42,77,.9);
-        background: radial-gradient(600px 200px at 20% 20%, rgba(116,230,255,.12), rgba(12,18,34,.92));
-        box-shadow: 0 10px 20px rgba(0,0,0,.35);
-        overflow:hidden;
-        min-height: 74px;
-      }
-      .badge::before{
-        content:"";
-        position:absolute; inset:-2px;
-        border-radius: 18px;
-        padding:2px;
-        background: conic-gradient(from 210deg,
-          rgba(242,211,106,.0),
-          rgba(242,211,106,.55),
-          rgba(116,230,255,.35),
-          rgba(242,211,106,.55),
-          rgba(242,211,106,.0)
-        );
-        -webkit-mask:
-          linear-gradient(#000 0 0) content-box,
-          linear-gradient(#000 0 0);
-        -webkit-mask-composite: xor;
-                mask-composite: exclude;
-        opacity:.85;
-        pointer-events:none;
-      }
-      .badge.locked{
-        filter: saturate(.35) brightness(.85);
-        opacity: .78;
-      }
-      .badge .icon{
-        position:absolute; left:12px; top:12px;
-        width:38px; height:38px;
-        display:grid; place-items:center;
-        border-radius: 12px;
-        border:1px solid rgba(242,211,106,.6);
-        background: linear-gradient(180deg, rgba(242,211,106,.18), rgba(12,18,34,.85));
-        box-shadow: inset 0 0 0 1px rgba(116,230,255,.10);
-        font-size: 18px;
-      }
-      .badge .title{ font-weight:800; font-size: 14px; margin:0 0 4px; }
-      .badge .desc{ margin:0; font-size: 12px; color: var(--muted); line-height: 1.25; }
-      .badge .meta{ margin-top:8px; font-size: 11px; color: rgba(169,183,214,.9); display:flex; gap:10px; flex-wrap:wrap; }
-      .tag{
-        padding: 2px 8px; border-radius: 999px;
-        border:1px solid rgba(28,42,77,.8);
-        background: rgba(7,10,18,.6);
-      }
-      .tag.good{ border-color: rgba(67,242,178,.55); color: rgba(67,242,178,.95); }
-      .tag.warn{ border-color: rgba(255,211,111,.55); color: rgba(255,211,111,.95); }
-
-      .toast{
-        position:absolute; left:50%; bottom:18px; transform: translateX(-50%);
-        width:min(560px, 92vw);
-        display:none;
-        padding: 10px 12px;
-        border-radius: 14px;
-        border:1px solid rgba(242,211,106,.55);
-        background: linear-gradient(180deg, rgba(12,18,34,.92), rgba(8,10,18,.94));
-        box-shadow: var(--shadow);
-        align-items:center;
-        gap:10px;
-      }
-      .toast.is-show{ display:flex; }
-      .toast .spark{
-        width:38px; height:38px; border-radius: 12px;
-        display:grid; place-items:center;
-        border:1px solid rgba(116,230,255,.45);
-        background: radial-gradient(300px 90px at 30% 30%, rgba(116,230,255,.18), rgba(12,18,34,.92));
-      }
-      .toast .t{ font-weight:900; font-size: 13px; margin:0; }
-      .toast .s{ font-size:12px; margin:2px 0 0; color: var(--muted); }
-
-      .shoplist{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-      .item{
-        border-radius: 16px;
-        border:1px solid rgba(28,42,77,.9);
-        background: rgba(12,18,34,.92);
-        padding: 12px;
-        box-shadow: 0 10px 20px rgba(0,0,0,.25);
-      }
-      .item h3{ margin:0 0 6px; font-size: 14px; }
-      .item p{ margin:0 0 10px; font-size: 12px; color: var(--muted); line-height: 1.25; }
-      .row{ display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-      .price{ color: var(--gold); font-weight:900; }
-      .small{ font-size: 11px; color: var(--muted); }
-
-      .hint{
-        position:absolute; right:12px; top:58px;
-        max-width: min(460px, 92vw);
-        padding: 10px 12px;
-        border-radius: 14px;
-        border:1px solid rgba(28,42,77,.8);
-        background: rgba(12,18,34,.72);
-        color: rgba(169,183,214,.95);
+@@ -184,70 +196,96 @@
         font-size: 12px;
         box-shadow: var(--shadow);
         pointer-events:none;
@@ -206,6 +98,32 @@
         .pill{ font-size: 13px; }
         .hint{ display:none; }
       }
+
+      @media (max-width: 980px){
+        .topbar{ flex-wrap:wrap; row-gap:8px; }
+        #statsPill{ order:1; width:100%; justify-content:space-between; flex-wrap:wrap; }
+        #bossPill{ order:2; width:100%; max-width:none; }
+        #actionsPill{ order:3; width:100%; justify-content:flex-start; }
+      }
+
+      @media (orientation: portrait) and (max-width: 980px){
+        .topbar{
+          top:auto;
+          bottom:0;
+          padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+          background: linear-gradient(180deg, rgba(7,10,18,0), rgba(7,10,18,.72));
+        }
+
+        #statsPill, #bossPill{ width: calc(50% - 6px); }
+        #actionsPill{
+          width:100%;
+          overflow-x:auto;
+          flex-wrap:nowrap;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+        }
+        #actionsPill .btn{ white-space:nowrap; }
+      }
     </style>
   </head>
   <body>
@@ -225,7 +143,7 @@
           </div>
           <span class="small" id="bossHpText">—</span>
         </div>
-        <div class="pill">
+        <div class="pill" id="actionsPill">
           <button class="btn" id="btnShop">Loja</button>
           <button class="btn" id="btnInv">Inventário</button>
           <button class="btn" id="btnSkills">Árvore</button>
@@ -251,212 +169,3 @@
 
       <!-- Fate Modal -->
       <div class="modal" id="fateModal" aria-hidden="true">
-        <div class="modal-card">
-          <div class="modal-head">
-            <h2>Destino do Círculo</h2>
-            <button class="btn" id="btnCloseFate">Fechar</button>
-          </div>
-          <div class="modal-body">
-            <p class="small">Escolha um final e, se quiser, reinicie em <b>New Game+</b>. O NG+ resgata conquistas em moedas e aumenta a dificuldade.</p>
-
-            <div class="shoplist">
-              <div class="item">
-                <h3>🔨 Destruir o ciclo</h3>
-                <p>Libertar o mundo. Romper a engrenagem da arena.</p>
-                <div class="row">
-                  <span class="small">Final: Libertação</span>
-                  <button class="btn" data-ending="destroy">Escolher</button>
-                </div>
-              </div>
-              <div class="item">
-                <h3>👁️ Dominar o Núcleo</h3>
-                <p>Tomar a arena. Ser o novo senhor do confronto.</p>
-                <div class="row">
-                  <span class="small">Final: Domínio</span>
-                  <button class="btn" data-ending="dominate">Escolher</button>
-                </div>
-              </div>
-              <div class="item">
-                <h3>🕸️ Sucumbir</h3>
-                <p>Virar a próxima ameaça. Um inimigo para outros.</p>
-                <div class="row">
-                  <span class="small">Final: Queda</span>
-                  <button class="btn" data-ending="succumb">Escolher</button>
-                </div>
-              </div>
-            </div>
-
-            <hr style="border:none;border-top:1px solid rgba(28,42,77,.6);margin:14px 0;" />
-
-            <div class="item">
-              <h3>♻️ New Game+</h3>
-              <p id="ngpInfo">Escolha um final para ver o resgate de conquistas.</p>
-              <div class="row">
-                <span class="price" id="ngpCoins">🪙 —</span>
-                <button class="btn" id="btnStartNGP" disabled>Iniciar New Game+</button>
-              </div>
-              <p class="small">Efeito: <b>reseta conquistas</b> e transforma conquistas obtidas em moedas. A cada NG+: boss mais forte, dano maior, XP mais caro.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-            <!-- Inventory Modal -->
-      <div class="modal" id="invModal" aria-hidden="true">
-        <div class="modal-card">
-          <div class="modal-head">
-            <h2>Inventário</h2>
-            <button class="btn" id="btnCloseInv">Fechar</button>
-          </div>
-          <div class="modal-body">
-            <div class="item">
-              <h3>Fragmentos do Núcleo</h3>
-              <p>Energia selada do Círculo. Usada para forjar e fortalecer armas.</p>
-              <div class="row">
-                <span class="price">🧿 <b id="invFragments">0</b></span>
-                <span class="small" id="invNgPlus">NG+ 0</span>
-              </div>
-            </div>
-
-            <div class="sep"></div>
-
-            <div class="item">
-              <h3>Equipamentos</h3>
-              <p class="small" id="invEquip">—</p>
-            </div>
-
-            <div class="sep"></div>
-
-            <div class="item">
-              <h3>Forja — Fortalecer Arma</h3>
-              <p class="small" id="invForgeInfo">Selecione uma arma comprando na loja.</p>
-              <div class="row">
-                <span class="price" id="invForgeCost">🪙 —</span>
-                <button class="btn" id="btnUpgradeWeapon" disabled>Fortalecer</button>
-              </div>
-              <p class="small" id="invForgeReq">—</p>
-            </div>
-
-            <div class="sep"></div>
-
-            <div class="item">
-              <h3>Drops do Boss</h3>
-              <p>Materiais de combate. Você pode <b>vender</b> por moedas ou usar como requisito na forja.</p>
-              <div id="invDrops" class="shoplist"></div>
-              <div class="row" style="margin-top:10px;">
-                <button class="btn" id="btnSellAll" title="Vende todos os drops">Vender tudo</button>
-                <span class="small" id="invSellHint">—</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pause Modal -->
-      <div class="modal" id="pauseModal" aria-hidden="true">
-        <div class="modal-card">
-          <div class="modal-head">
-            <h2>Pausado</h2>
-            <button class="btn" id="btnClosePause">Fechar</button>
-          </div>
-          <div class="modal-body">
-            <div class="item">
-              <h3>Menu</h3>
-              <p class="small" id="pauseMsg">Jogo pausado. Você pode salvar ou sair.</p>
-              <div class="row">
-                <button class="btn" id="btnResume">Continuar</button>
-                <button class="btn" id="btnPauseShop">Loja</button>
-                <button class="btn" id="btnPauseInv">Inventário</button>
-                <button class="btn" id="btnPauseSkills">Árvore</button>
-                <button class="btn" id="btnSave">Salvar</button>
-                <button class="btn" id="btnSaveExit">Salvar &amp; Fechar</button>
-              </div>
-              <p class="small">Obs: no navegador, “Fechar” pode não fechar a aba automaticamente. Mas o save fica garantido.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Skills Modal -->
-      <div class="modal" id="skillsModal" aria-hidden="true">
-        <div class="modal-card">
-          <div class="modal-head">
-            <h2>Árvore de Habilidades — Arma</h2>
-            <button class="btn" id="btnCloseSkills">Fechar</button>
-          </div>
-          <div class="modal-body">
-            <p class="small" id="skillsHeader">Selecione uma arma comprando na loja.</p>
-
-            <div class="shoplist">
-              <div class="item">
-                <h3>🎯 Crítico</h3>
-                <p class="small" id="skillCritDesc">Aumenta chance de crítico (dano x2).</p>
-                <div class="row">
-                  <span class="small" id="skillCritLv">Lv 0</span>
-                  <button class="btn" id="btnUpCrit" disabled>Up</button>
-                </div>
-                <p class="small" id="skillCritReq">—</p>
-              </div>
-
-              <div class="item">
-                <h3>🩸 Roubo de Vida</h3>
-                <p class="small" id="skillLifeDesc">Cura uma % do dano causado.</p>
-                <div class="row">
-                  <span class="small" id="skillLifeLv">Lv 0</span>
-                  <button class="btn" id="btnUpLife" disabled>Up</button>
-                </div>
-                <p class="small" id="skillLifeReq">—</p>
-              </div>
-
-              <div class="item">
-                <h3>💨 Reset de Esquiva</h3>
-                <p class="small" id="skillDashDesc">Chance de zerar cooldown da esquiva ao acertar.</p>
-                <div class="row">
-                  <span class="small" id="skillDashLv">Lv 0</span>
-                  <button class="btn" id="btnUpDash" disabled>Up</button>
-                </div>
-                <p class="small" id="skillDashReq">—</p>
-              </div>
-            </div>
-
-            <div class="sep"></div>
-            <div class="item">
-              <h3>Notas</h3>
-              <p class="small">As habilidades são por-arma. Trocar de arma troca sua árvore ativa.</p>
-              <p class="small">Custos usam <b>Fragmentos do Núcleo</b> e <b>drops por Ato</b> (Corrompido / Campeão Caído / Besta).</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-<!-- Achievements Modal -->
-      <div class="modal" id="achModal" aria-hidden="true">
-        <div class="modal-card">
-          <div class="modal-head">
-            <h2>Conquistas</h2>
-            <button class="btn" id="btnCloseAch">Fechar</button>
-          </div>
-          <div class="modal-body">
-            <div class="grid" id="achGrid"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Shop Modal -->
-      <div class="modal" id="shopModal" aria-hidden="true">
-        <div class="modal-card">
-          <div class="modal-head">
-            <h2>Loja do Colecionador</h2>
-            <button class="btn" id="btnCloseShop">Fechar</button>
-          </div>
-          <div class="modal-body">
-            <p class="small">Dica: progresso e conquistas ficam salvos no <code>localStorage</code>.</p>
-            <div class="shoplist" id="shopList"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script type="module" src="/src/main.js"></script>
-  </body>
-</html>
