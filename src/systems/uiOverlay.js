@@ -41,6 +41,11 @@ export class UIOverlay {
     this.btnSkills = $('btnSkills');
     this.btnPause = $('btnPause');
 
+    // Quick menu (botão no canto superior que pausa ao abrir)
+    this.quickMenu = $('quickMenu');
+    this.menuPanel = $('menuPanel');
+    this.btnMenuToggle = $('btnMenuToggle');
+    this.quickMenuOpen = false;
     // Fate / NG+
     this.ngpInfo = $('ngpInfo');
     this.ngpCoins = $('ngpCoins');
@@ -103,7 +108,8 @@ export class UIOverlay {
 
     this.btnPause.addEventListener('click', () => this.openPause());
     $('btnClosePause').addEventListener('click', () => this.closePause());
-
+    // Abrir/fechar menu rápido (abre = pausa o combate)
+    this.btnMenuToggle.addEventListener('click', () => this.toggleQuickMenu());
     // click outside closes (except pause, which is a menu)
     this.achModal.addEventListener('click', (e) => { if (e.target === this.achModal) this.closeAch(); });
     this.shopModal.addEventListener('click', (e) => { if (e.target === this.shopModal) this.closeShop(); });
@@ -185,6 +191,25 @@ export class UIOverlay {
     });
   }
 
+  
+  // ========== Quick menu ==========
+  toggleQuickMenu(){
+    this.setQuickMenuOpen(!this.quickMenuOpen);
+  }
+
+  setQuickMenuOpen(open){
+    this.quickMenuOpen = !!open;
+    this.quickMenu.classList.toggle('is-open', this.quickMenuOpen);
+    this.btnMenuToggle.setAttribute('aria-expanded', this.quickMenuOpen ? 'true' : 'false');
+
+    // Ao abrir o menu, o jogo pausa; ao fechar, volta.
+    if (this.quickMenuOpen) {
+      window.dispatchEvent(new CustomEvent('bf:pause:open'));
+    } else if (!this.pauseModal.classList.contains('is-open')) {
+      window.dispatchEvent(new CustomEvent('bf:pause:resume'));
+    }
+  }
+  
   setState(s){
     this.lastState = s;
     this.setStats(s);
